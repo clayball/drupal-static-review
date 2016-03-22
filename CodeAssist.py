@@ -7,6 +7,9 @@ import mmap
 from os import listdir
 from os.path import isfile, join, isdir
 
+def cutit(s,n):    
+   return s[n:]
+
 def getAllFilesRecursive(root):
     files = [ join(root,f) for f in listdir(root) if isfile(join(root,f))]
     dirs = [ d for d in listdir(root) if isdir(join(root,d))]
@@ -24,10 +27,10 @@ def mainf(root):
         s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         if s.find("$form_state['values']") != -1:
             print '\nFound on this file ******'
-            print items
+            print cutit(items, 40)
         else:
             print '\nNot found on file '
-            print items
+            print cutit(items, 40)
 
 
 if __name__ == "__main__":
@@ -38,3 +41,4 @@ if __name__ == "__main__":
         print("Usage: CodeAssist.py <path to module folder>")
         print("Ie: /root/Desktop/Security_Review/metatag")
     exit(0)
+
