@@ -11,18 +11,7 @@ from os.path import isfile, join, isdir
 
 def searchMe(searchString, s, items):
     root_item = items
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
-    root_item = root_item.split('/', 1)[-1]
+    root_item = root_item.split('/', -1)[-1]
     reportContent = 'This is the report of the file ' + root_item + '\n'
     reportContent += '====================================\n'
     for queries in searchString:
@@ -54,15 +43,7 @@ def mainf(root):
     arrayList = getAllFilesRecursive(root)
     content = ''
     rooted = root
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
-    rooted = rooted.split('/', 1)[-1]
+    rooted = rooted.split('/', -1)[-1]
     for items in arrayList:
         f = open(items)
         s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
