@@ -1,216 +1,24 @@
-This is the report of the file ma_ux.info
-====================================
-Did not find $form_state['values'] in .info
-
-Did not find $form_state['input'] in .info
-
-Did not find eval in .info
-
-Did not find mysql in .info
-
-Did not find query in .info
-
-Did not find $_GET in .info
-
-Did not find $_POST in .info
-
-Did not find $_REQUEST in .info
-
-Did not find check_plain in .info
-
-Did not find xss in .info
-
-Did not find check_markup in .info
-
 This is the report of the file ma_ux.module
 ====================================
-******************* Found ******************* $form_state['values'] in .module
+******************* Found ******************* $form_state['values'] in /ma_ux.module
 
-Did not find $form_state['input'] in .module
+Did not find $form_state['input'] in /ma_ux.module
 
-Did not find eval in .module
+Did not find eval in /ma_ux.module
 
-Did not find mysql in .module
+Did not find mysql in /ma_ux.module
 
-******************* Found ******************* query in .module
+******************* Found ******************* query in /ma_ux.module
 
-******************* Found ******************* $_GET in .module
+******************* Found ******************* $_GET in /ma_ux.module
 
-Did not find $_POST in .module
+Did not find $_POST in /ma_ux.module
 
-Did not find $_REQUEST in .module
+Did not find $_REQUEST in /ma_ux.module
 
-Did not find check_plain in .module
+Did not find check_plain in /ma_ux.module
 
-Did not find xss in .module
+Did not find xss in /ma_ux.module
 
-Did not find check_markup in .module
-
-This is the report of the file node_form_tweaks.css.less
-====================================
-Did not find $form_state['values'] in form_tweaks.css.less
-
-Did not find $form_state['input'] in form_tweaks.css.less
-
-Did not find eval in form_tweaks.css.less
-
-Did not find mysql in form_tweaks.css.less
-
-Did not find query in form_tweaks.css.less
-
-Did not find $_GET in form_tweaks.css.less
-
-Did not find $_POST in form_tweaks.css.less
-
-Did not find $_REQUEST in form_tweaks.css.less
-
-Did not find check_plain in form_tweaks.css.less
-
-Did not find xss in form_tweaks.css.less
-
-Did not find check_markup in form_tweaks.css.less
-
-This is the report of the file vcs.xml
-====================================
-Did not find $form_state['values'] in /vcs.xml
-
-Did not find $form_state['input'] in /vcs.xml
-
-Did not find eval in /vcs.xml
-
-Did not find mysql in /vcs.xml
-
-Did not find query in /vcs.xml
-
-Did not find $_GET in /vcs.xml
-
-Did not find $_POST in /vcs.xml
-
-Did not find $_REQUEST in /vcs.xml
-
-Did not find check_plain in /vcs.xml
-
-Did not find xss in /vcs.xml
-
-Did not find check_markup in /vcs.xml
-
-This is the report of the file modules.xml
-====================================
-Did not find $form_state['values'] in /modules.xml
-
-Did not find $form_state['input'] in /modules.xml
-
-Did not find eval in /modules.xml
-
-Did not find mysql in /modules.xml
-
-Did not find query in /modules.xml
-
-Did not find $_GET in /modules.xml
-
-Did not find $_POST in /modules.xml
-
-Did not find $_REQUEST in /modules.xml
-
-Did not find check_plain in /modules.xml
-
-Did not find xss in /modules.xml
-
-Did not find check_markup in /modules.xml
-
-This is the report of the file workspace.xml
-====================================
-Did not find $form_state['values'] in /workspace.xml
-
-Did not find $form_state['input'] in /workspace.xml
-
-Did not find eval in /workspace.xml
-
-Did not find mysql in /workspace.xml
-
-Did not find query in /workspace.xml
-
-Did not find $_GET in /workspace.xml
-
-Did not find $_POST in /workspace.xml
-
-Did not find $_REQUEST in /workspace.xml
-
-Did not find check_plain in /workspace.xml
-
-Did not find xss in /workspace.xml
-
-Did not find check_markup in /workspace.xml
-
-This is the report of the file ma_ux.iml
-====================================
-Did not find $form_state['values'] in /ma_ux.iml
-
-Did not find $form_state['input'] in /ma_ux.iml
-
-Did not find eval in /ma_ux.iml
-
-Did not find mysql in /ma_ux.iml
-
-Did not find query in /ma_ux.iml
-
-Did not find $_GET in /ma_ux.iml
-
-Did not find $_POST in /ma_ux.iml
-
-Did not find $_REQUEST in /ma_ux.iml
-
-Did not find check_plain in /ma_ux.iml
-
-Did not find xss in /ma_ux.iml
-
-Did not find check_markup in /ma_ux.iml
-
-This is the report of the file misc.xml
-====================================
-Did not find $form_state['values'] in /misc.xml
-
-Did not find $form_state['input'] in /misc.xml
-
-Did not find eval in /misc.xml
-
-Did not find mysql in /misc.xml
-
-Did not find query in /misc.xml
-
-Did not find $_GET in /misc.xml
-
-Did not find $_POST in /misc.xml
-
-Did not find $_REQUEST in /misc.xml
-
-Did not find check_plain in /misc.xml
-
-Did not find xss in /misc.xml
-
-Did not find check_markup in /misc.xml
-
-This is the report of the file .name
-====================================
-Did not find $form_state['values'] in /.name
-
-Did not find $form_state['input'] in /.name
-
-Did not find eval in /.name
-
-Did not find mysql in /.name
-
-Did not find query in /.name
-
-Did not find $_GET in /.name
-
-Did not find $_POST in /.name
-
-Did not find $_REQUEST in /.name
-
-Did not find check_plain in /.name
-
-Did not find xss in /.name
-
-Did not find check_markup in /.name
+Did not find check_markup in /ma_ux.module
 
