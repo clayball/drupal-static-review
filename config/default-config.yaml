@@ -1,2 +1,3 @@
 review_dir: /home/<user>/code-reviews/drupal7
 review_filetype: [js, html, php, css, module, install, inc]
+search_strings: ["$form_state['values']", "$form_state['input']", "eval", "mysql", "query", "$_GET", "$_POST", "$_REQUEST", "check_plain", "xss", "check_markup"]
