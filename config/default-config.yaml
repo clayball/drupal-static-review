@@ -1,0 +1,2 @@
+review_dir: /home/<user>/code-reviews/drupal7
+review_filetype: [js, html, php, css, module, install, inc]
