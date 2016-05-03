@@ -22,21 +22,38 @@ from os.path import isfile, join, isdir
 
 
 # Define our modules here
-def searchMe(searchString, s, items, length):
+def search_file(search_strings, s, items, length):
     root_item = items
     root_item = root_item.split('/', -1)[-1]
-    reportContent = 'This is the report of the file ' + root_item + '\n'
-    reportContent += '=========================================================================================\n'
-    for queries in searchString:
+    report_content = '===============================================================================\n'
+    report_content += '=\n'
+    report_content += '=    Report for ' + root_item + '\n'
+    report_content += '=\n'
+    report_content += '===============================================================================\n\n'
+    for queries in search_strings:
+        is_bad = 0
+        if debug_messages == True:
+            print '[+] queries: %s' % queries
         if s.find(queries) != -1:
-            module_status = '********** FOUND ********** ' + queries
+            if debug_messages == True:
+                print '[+] queries != -1: %s' % queries
+            # check if the found string is a good, bad, or sqli string
+            # is_bad = check_is_bad(queries, s)
+            # if is_bad == 1:
+            #     module_status = '****** Found: BAD STRING ****** ' + queries
+            # else:
+            #     is_sqli = check_is_sqli(queries, s)
+            #     if is_sqli == 1:
+            #         module_status = '****** Found: SQLI STRING ****** ' + queries
+            #     else:
+            module_status = '****** Found: STRING ****** ' + queries
             module_path = ' in ' + cutit(items, length) + '\n\n'
-            reportContent += module_status + module_path
+            report_content += module_status + module_path
         else:
             module_status = 'Did not find ' + queries
             module_path = ' in ' + cutit(items, length) + '\n\n'
-            reportContent += module_status + module_path
-    return reportContent
+            report_content += module_status + module_path
+    return report_content
 
 
 # TODO: add description
@@ -56,13 +73,45 @@ def getAllFilesRecursive(root):
     return files
 
 
+# check if the found string is in bad_strings
+def check_is_bad(queries, s):
+    found = 0
+    bad_strings = content_yaml['bad_strings']
+    #if debug_messages == True:
+        #print '[+] Debug: bad_strings %s' % bad_strings
+    for query in queries:
+        if s.find(query) != -1:
+            if debug_messages == True:
+                print '[+] Debug: found bad string'
+                found = 1
+    return found
+
+
+# check if the found string is in bad_strings
+def check_is_sqli(queries, s):
+    found = 0
+    sqli_strings = content_yaml['sqli_strings']
+    if debug_messages == True:
+        print '[+] Debug: sqli_strings %s' % sqli_strings
+    for q in queries:
+        if s.find(q) != -1:
+            if debug_messages == True:
+                print '[+] Debug: found sqli string'
+                found = 1
+    return found
+
+
 # TODO: add description
+#       add check if the identified string is a good thing or a bad thing, e.g., eval() is BAD
 def mainf(module_name):
-    with open('./config/config.yaml', 'r') as z:
-        content_yaml = yaml.load(z)
-    root = content_yaml['review_dir']
+    #with open('./config/config.yaml', 'r') as z:
+    #    content_yaml = yaml.load(z)
+    #root = content_yaml['review_dir']
     filetypes = content_yaml['review_filetype']
-    search_strings = content_yaml['search_strings']
+    search_strings = content_yaml['strings']
+    #debug_messages = content_yaml['debug_messages']
+    if debug_messages == True:
+        print "[+] search_strings %s\n" % search_strings
     full_path = root + '/' + module_name
     length = len(full_path)
     arrayList = getAllFilesRecursive(full_path)
@@ -76,7 +125,7 @@ def mainf(module_name):
     for items in new_arrayList:
         f = open(items)
         s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-        content += searchMe(search_strings, s, items, length)
+        content += search_file(search_strings, s, items, length)
     fs = open( module_name + '.txt', 'w' )
     fs.write(content)
     fs.close()
@@ -87,7 +136,8 @@ def mainf(module_name):
 # Python should have a module/library that does this.
 # TODO: add sanitization and validation code
 def clean_user_args():
-    print '[+] in clean_user_args'
+    if debug_messages == True:
+        print '[+] Debug: begin clean_user_args\t \t \t \t[OK]'
     return 1
 
 
@@ -97,15 +147,20 @@ if __name__ == "__main__":
         module_name = sys.argv[1]
         # sanitize and validate user input TODO
         # remove print lines after testing.
+        with open('./config/config.yaml', 'r') as z:
+            content_yaml = yaml.load(z)
+        root = content_yaml['review_dir']
+        debug_messages = content_yaml['debug_messages']
         if (clean_user_args() == 1):
-            print '[+] Check: clean input, continue. %t %t %t [OK]'
+            if debug_messages == True:
+                print '[+] Debug: good input.\t \t \t \t \t \t[OK]'
+            mainf(module_name)
         else:
             print '[!] Warning: something went wrong with cleaning user args.'
             exit(0)
         
-        mainf(module_name)
     except IndexError:
-        print("Usage: CodeAssist.py <name of module>")
+        print("Usage: drupal7-module-check.py <name of module>")
         print("Ie: metatag")
     exit(0)
 
