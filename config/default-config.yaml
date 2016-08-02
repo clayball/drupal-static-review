@@ -1,9 +1,10 @@
-review_dir: /home/<user>/code-reviews/drupal7
+review_dir: /home/<user>/code-reviews/drupal7/contrib
 review_filetype: [js, html, php, css, module, install, inc]
 
-strings: ["$form_state['values']", "$form_state['input']", "eval", "mysql", "query", "$_GET", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup"]
-good_strings: ["$form_state['values']", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup"]
-bad_strings: ["eval", "$_GET", "$form_state['input']"]
-sqli_strings: ["mysql", "query"]
+full: ["$form_state['values']", "$form_state['input']", "eval", "mysql", "query", "$_GET", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup"]
+good: ["$form_state['values']", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup"]
+bad: ["eval", "$_GET", "$form_state['input']"]
+sql: ["mysql", "query"]
+input: ["$form_state", "_GET", "_POST", "_REQUEST"]
 
 debug_messages: False
