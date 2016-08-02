@@ -12,7 +12,6 @@
 #
 # Text file reporting all identified code fragments.
 
-
 import sys
 import os
 import yaml
@@ -46,7 +45,7 @@ def search_file(search_strings, s, items, length):
             #     if is_sqli == 1:
             #         module_status = '****** Found: SQLI STRING ****** ' + queries
             #     else:
-            module_status = '****** Found: STRING ****** ' + queries
+            module_status = '*** Found: STRING *** ' + queries
             module_path = ' in ' + cutit(items, length) + '\n\n'
             report_content += module_status + module_path
         else:
@@ -108,7 +107,7 @@ def mainf(module_name):
     #    content_yaml = yaml.load(z)
     #root = content_yaml['review_dir']
     filetypes = content_yaml['review_filetype']
-    search_strings = content_yaml['strings']
+
     #debug_messages = content_yaml['debug_messages']
     if debug_messages == True:
         print "[+] search_strings %s\n" % search_strings
@@ -126,7 +125,7 @@ def mainf(module_name):
         f = open(items)
         s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
         content += search_file(search_strings, s, items, length)
-    fs = open( module_name + '.txt', 'w' )
+    fs = open('reports/' + module_name + '.txt', 'w' )
     fs.write(content)
     fs.close()
     print content
@@ -158,9 +157,17 @@ if __name__ == "__main__":
         else:
             print '[!] Warning: something went wrong with cleaning user args.'
             exit(0)
-        
-    except IndexError:
-        print("Usage: drupal7-module-check.py <name of module>")
-        print("Ie: metatag")
+        # allow search for specific types of strings, e.g. sqli_strings, or all
+        if sys.argv[2]:
+            print("[+] search string: %s") % sys.argv[2]
+            searchStrings = sys.argv[2]  # TODO: validate this input
+        else:
+            searchStrings = "strings"
+
+        search_strings = content_yaml[searchStrings]
+
+    except:
+        print("[-] Error: an unknown has occurred.")
+
     exit(0)
 

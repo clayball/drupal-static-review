@@ -3,6 +3,7 @@
 # Imports
 import sys
 import yaml
+import mmap
 from os import listdir
 from os.path import isfile, join, isdir
 
@@ -12,25 +13,59 @@ class DrupalStaticReview:
 	# constructor
 	def __init__(self):
 		# type: (object) -> object
-		#searchType = "full"
-		print "[+] Search type: %s" % searchType
+		print "[*] Search type: %s" % searchType
 
 	# Find all files that are part of the module
 	@classmethod
-	def getAllFilesRecursive():
-		files = [join(codeDirectory, f) for f in listdir(codeDirectory) if isfile(join(codeDirectory, f))]
-		dirs = [d for d in listdir(codeDirectory) if isdir(join(codeDirectory, d))]
+	def getAllFilesRecursive(self, fullPath):
+		files = [join(fullPath, f) for f in listdir(fullPath) if isfile(join(fullPath, f))]
+		dirs = [d for d in listdir(fullPath) if isdir(join(fullPath, d))]
 		for d in dirs:
-			files_in_d = getAllFilesRecursive(join(codeDirectory, d))
+			files_in_d = self.getAllFilesRecursive(join(fullPath, d))
 			if files_in_d:
 				for f in files_in_d:
-					files.append(join(codeDirectory, f))
-		return files
+					files.append(join(fullPath, f))
+		new_fileList = []
+		for file in files:
+			tempFile = file
+			for filetype in fileTypes:
+				if file.split('.', -1)[-1] == filetype:
+					new_fileList += [file]
+		#print '[+] new_fileList: %s' % new_fileList
+		return new_fileList
 
 	# Iterate over each file that is part of the module
 	@classmethod
-	def searchFile(cls):
-		print "[+] Searching file: %s" % sfile
+	def search_file(self):
+		string_found = 0
+		root_item = items
+		root_item = root_item.split('/', -1)[-1]
+		report_content = ''
+		for queries in searchStrings:
+			is_bad = 0
+			if debugMessages == True:
+				print '[+] queries: %s' % queries
+			if s.find(queries) != -1:
+				if debugMessages == True:
+					print '[+] queries != -1: %s' % queries
+				report_content = '\n'
+				report_content += '= File: ' + root_item + '\n'
+				report_content += '========================================\n\n'
+				module_status = 'Found: ' + queries
+				module_path = ' in ' + items[length:] + '\n\n'
+				report_content += module_status + module_path
+				string_found = 1
+		return report_content
+
+	# Write report header
+	@classmethod
+	def create_report_header(self):
+		report_header =  'Static Report for ' + moduleName + '\n'
+		report_header += 'Search type: ' + searchType + '\n'
+		report_header += '==================================================\n\n'
+		if debugMessages == True:
+			print '\n\n' + report_header
+		return report_header
 
 
 # Main section
@@ -56,10 +91,26 @@ except:
 codeDirectory = contentYaml['review_dir']
 searchStrings = contentYaml[searchType]
 debugMessages = contentYaml['debug_messages']
+fileTypes = contentYaml['review_filetypes']
 
 print "[*] Performing %s search on %s" % (searchType, moduleName)
 print "[*]  located in %s" % codeDirectory
 
 review = DrupalStaticReview()
+fullPath = codeDirectory + '/' + moduleName
+length = len(fullPath)
+reviewFiles = review.getAllFilesRecursive(fullPath)
 
+print '[*] reviewFiles: %s' % reviewFiles
 
+content = ''
+for items in reviewFiles:
+	f = open(items)
+	s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
+	content += review.search_file()
+fs = open('reports/' + moduleName + '-' + searchType + '.txt', 'w')
+report_head = review.create_report_header()
+fs.write(report_head)
+fs.write(content)
+fs.close()
+print content
