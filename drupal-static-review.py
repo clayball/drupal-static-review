@@ -17,11 +17,11 @@ class DrupalStaticReview:
 
 	# Find all files that are part of the module
 	@classmethod
-	def getAllFilesRecursive(self, fullPath):
+	def get_all_files(self, fullPath):
 		files = [join(fullPath, f) for f in listdir(fullPath) if isfile(join(fullPath, f))]
 		dirs = [d for d in listdir(fullPath) if isdir(join(fullPath, d))]
 		for d in dirs:
-			files_in_d = self.getAllFilesRecursive(join(fullPath, d))
+			files_in_d = self.get_all_files(join(fullPath, d))
 			if files_in_d:
 				for f in files_in_d:
 					files.append(join(fullPath, f))
@@ -99,7 +99,7 @@ print "[*]  located in %s" % codeDirectory
 review = DrupalStaticReview()
 fullPath = codeDirectory + '/' + moduleName
 length = len(fullPath)
-reviewFiles = review.getAllFilesRecursive(fullPath)
+reviewFiles = review.get_all_files(fullPath)
 
 print '[*] reviewFiles: %s' % reviewFiles
 
