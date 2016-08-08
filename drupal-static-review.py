@@ -108,7 +108,7 @@ for items in reviewFiles:
 	f = open(items)
 	s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
 	content += review.search_file()
-fs = open('reports/' + moduleName + '-' + searchType + '.txt', 'w')
+fs = open('reports/' + moduleName + '-static-' + searchType + '.txt', 'w')
 report_head = review.create_report_header()
 fs.write(report_head)
 fs.write(content)
