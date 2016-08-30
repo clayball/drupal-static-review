@@ -1,80 +1,51 @@
 #!/usr/bin/env python
 
-# Imports
+# - Open file and search for string.. display each line number the string is
+# found on.
+# - Use a searchString list instead of a single string
+# - Search multiple files
+# - Add count of each string found (summary details)
+
 import sys
+import os
 import yaml
-import mmap
-from os import listdir
-from os.path import isfile, join, isdir
 
 
-# DrupalStaticReview class
-class DrupalStaticReview:
-	# constructor
-	def __init__(self):
-		# type: (object) -> object
-		print "[*] Search type: %s" % searchType
-
-	# Find all files that are part of the module
-	@classmethod
-	def get_all_files(self, fullPath):
-		files = [join(fullPath, f) for f in listdir(fullPath) if isfile(join(fullPath, f))]
-		dirs = [d for d in listdir(fullPath) if isdir(join(fullPath, d))]
-		for d in dirs:
-			files_in_d = self.get_all_files(join(fullPath, d))
-			if files_in_d:
-				for f in files_in_d:
-					files.append(join(fullPath, f))
-		new_fileList = []
+def find_all_files():
+	print '[+] finding all files.'
+	for root, dirs, files in os.walk(fullPath):
 		for file in files:
-			tempFile = file
-			for filetype in fileTypes:
-				if file.split('.', -1)[-1] == filetype:
-					new_fileList += [file]
-		#print '[+] new_fileList: %s' % new_fileList
-		return new_fileList
+			if file.endswith(".module") or file.endswith(".inc") or file.endswith(".install") or file.endswith(".php") :
+				print(os.path.join(root, file))
+				infiles.append(os.path.join(root, file))
 
-	# Iterate over each file that is part of the module
-	@classmethod
-	def search_file(self):
-		string_found = 0
-		root_item = items
-		root_item = root_item.split('/', -1)[-1]
-		report_content = ''
-		for queries in searchStrings:
-			is_bad = 0
-			if debugMessages == True:
-				print '[+] queries: %s' % queries
-			if s.find(queries) != -1:
-				if debugMessages == True:
-					print '[+] queries != -1: %s' % queries
-				report_content = '\n'
-				report_content += '= File: ' + root_item + '\n'
-				report_content += '========================================\n\n'
-				module_status = 'Found: ' + queries
-				module_path = ' in ' + items[length:] + '\n\n'
-				report_content += module_status + module_path
-				string_found = 1
-		return report_content
 
-	# Write report header
-	@classmethod
-	def create_report_header(self):
-		report_header =  'Static Report for ' + moduleName + '\n'
-		report_header += 'Search type: ' + searchType + '\n'
-		report_header += '==================================================\n\n'
-		if debugMessages == True:
-			print '\n\n' + report_header
-		return report_header
+def create_report_header():
+	report_header = 'Static Report for ' + moduleName + '\n'
+	report_header += 'Search type: ' + searchType + '\n'
+	report_header += '==================================================\n\n'
+	if debugMessages == True:
+		print '\n\n' + report_header
+	return report_header
 
+
+sqlSearch = ["mysql", "query"]
+inputSearch = ["$form_state", "_GET", "_POST", "_REQUEST"]
+# not including t(), st()
+sanitizationSearch = ["check_markup", "check_plain", "check_url", "drupal_attributes", "drupal_strip_dangerous_protocols", "filter_xss", "format_string", "get_t"]
+
+#infile = 'example.php'
+infiles = []
+
+searchStrings = ["check_markup", "check_plain", "check_url", "drupal_attributes", "drupal_strip_dangerous_protocols", "filter_xss", "format_string", "get_t"]
+report = ''
 
 # Main section
 
 # get arguments
 moduleName = sys.argv[1]
-# TODO: sanitize/validate/encode? input
 
-# Allow search for specific types of strings, e.g. sqli_strings, or allif len(sys.argv[2]):
+# Allow search for specific types of strings, e.g. sql, or all if len(sys.argv[2]):
 try:
 	searchType = sys.argv[2]
 except:
@@ -92,25 +63,32 @@ codeDirectory = contentYaml['review_dir']
 searchStrings = contentYaml[searchType]
 debugMessages = contentYaml['debug_messages']
 fileTypes = contentYaml['review_filetypes']
-
 print "[*] Performing %s search on %s" % (searchType, moduleName)
 print "[*]  located in %s" % codeDirectory
 
-review = DrupalStaticReview()
 fullPath = codeDirectory + '/' + moduleName
-length = len(fullPath)
-reviewFiles = review.get_all_files(fullPath)
+#print '[*] fullPath: ', fullPath
+#length = len(fullPath)
 
-print '[*] reviewFiles: %s' % reviewFiles
+find_all_files()
+#print '[*] infiles', infiles
 
-content = ''
-for items in reviewFiles:
-	f = open(items)
-	s = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-	content += review.search_file()
+
+for infile in infiles:
+	#print '[debug] infile: ', infile
+	with open(infile) as reviewFile:
+		#print '[debug] reviewFile ', reviewFile
+		for num, line in enumerate(reviewFile, 1):
+			for s in searchStrings:
+				if s in line:
+					print '[+]', s, 'at line:', num, '\t', line.lstrip()
+					report += infile + ' ' + s + ' at line: ' + str(num)  + '\n' + line.lstrip() + '\n\n'
+	report += '[*] End report for ' + infile + '\n'
+	report += '=== \n\n'
+# ===
+
+header = create_report_header()
 fs = open('reports/' + moduleName + '-static-' + searchType + '.txt', 'w')
-report_head = review.create_report_header()
-fs.write(report_head)
-fs.write(content)
+fs.write(header)
+fs.write(report)
 fs.close()
-print content
