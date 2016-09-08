@@ -20,6 +20,8 @@ Other features will include:
 The goal of these results is to import them into a soon-to-be-developed tool
 for further processing.
 
+Note: this project currently target Drupal 7.
+
 
 ## How to use drupal-static-review.py
 
