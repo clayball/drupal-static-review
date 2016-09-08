@@ -1,11 +1,11 @@
 review_dir: /home/<user>/code-reviews/drupal7/contrib
-review_filetype: [js, html, php, css, module, install, inc]
+review_filetypes: [js, html, php, css, module, install, inc]
 
 full: ["$form_state['values']", "$form_state['input']", "eval", "mysql", "query", "$_GET", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup", "urlencode"]
 good: ["$form_state['values']", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup"]
 bad: ["eval", "$form_state['input']"]
 sql: ["mysql", "query"]
 input: ["$form_state", "_GET", "_POST", "_REQUEST"]
-sanitization: ["check_markup", "check_plain", "check_url", "drupal_attributes", "drupal_strip_dangerous_protocols", "filter_xss", "filter_xss_admin", "filter_xss_bad_protocol", "format_string", "get_t", "st", "t", "_filter_xss_attributes", "_filter_xss_split"]
+sanitization: ["check_markup", "check_plain", "check_url", "drupal_attributes", "drupal_strip_dangerous_protocols", "filter_xss", "filter_xss_admin", "filter_xss_bad_protocol", "format_string", "get_t", "_filter_xss_attributes", "_filter_xss_split"]
 
 debug_messages: False
