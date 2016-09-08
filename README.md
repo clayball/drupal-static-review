@@ -1,7 +1,24 @@
 # Drupal Static Review
 
 This script is the first step used when performing a security review for a
-Drupal modules. 
+Drupal module. A report will be saved to the reports/ directory identifying
+the file and line number where a string of interest is found. For example,
+
+```
+/home/XXXX/drupal/drupal7/contrib/ctools/ctools.install query at line: 196
+$result = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => 'panels_views'))->fetchField();
+
+
+[*] End report for /home/XXXX/drupal/drupal7/contrib/ctools/ctools.install 
+```
+
+Other features will include:
+
+- identify menu_path URLs
+- locate input forms
+
+The goal of these results is to import them into a soon-to-be-developed tool
+for further processing.
 
 
 ## How to use drupal-static-review.py
