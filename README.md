@@ -1,5 +1,12 @@
 # Drupal Static Review
 
+
+“Code review is probably the single-most effective technique for identifying
+security flaws. When used together with automated tools and manual
+penetration testing, code review can significantly increase the cost
+effectiveness of an application security verification effort.” – Open Web
+Application Security Project (OWASP)
+
 This script is the first step used when performing a security review for a
 Drupal module. A report will be saved to the reports/ directory identifying
 the file and line number where a string of interest is found. For example,
