@@ -65,6 +65,16 @@ chmod u+x drupal-static-review
 
 **View the report**
 
-This script will generate a text file with output from the defined checks.
+This script will generate a report file that includes output from the defined
+checks. Report files are placed in the report/ directory.
+
+
+**Now what?**
+
+Manually review the entries in the report. 
+
+TODO: add more details
+
+
 
 
