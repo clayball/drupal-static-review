@@ -1,5 +1,5 @@
 config/config.yaml
 *.txt
-reports/*.txt
+reports/*
 .idea/*
 venv-d7static/*
