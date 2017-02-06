@@ -2,3 +2,4 @@ config/config.yaml
 *.txt
 reports/*.txt
 .idea/*
+venv-d7static/*
