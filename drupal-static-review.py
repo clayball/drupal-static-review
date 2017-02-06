@@ -73,17 +73,6 @@ def create_menureport_header():
     return report_header
 
 
-# These should be read from config file
-'''
-sqlSearch = ["mysql", "query"]
-inputSearch = ["$form_state", "_GET", "_POST", "_REQUEST"]
-# not including t(), st()
-sanitizationSearch = ["check_markup", "check_plain", "check_url",
-                      "drupal_attributes", "drupal_strip_dangerous_protocols",
-                      "filter_xss", "format_string", "get_t"]
-'''
-
-
 # ######### MAIN PROGRAM #########
 
 # get arguments
@@ -138,7 +127,7 @@ fs.close()
 # TODO: still deciding on whether we should break this out to another script
 #       or not.
 # Find all of the menu paths and flag those that are admin
-menuReport = find_menu_paths()
+#menuReport = find_menu_paths()
 
 
 ##############
