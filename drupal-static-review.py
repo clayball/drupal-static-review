@@ -18,19 +18,26 @@ infiles = []
 
 # Static report
 def find_search_strings():
-    print '[+] searching for search string strings..'
+    print '[+] Searching for strings of interest..'
     report = ''
+    total_hits = 0
     for infile in infiles:
+        hitsinfile = 0
         # print '[debug] infile: ', infile
         with open(infile) as reviewFile:
             # print '[debug] reviewFile ', reviewFile
             for num, line in enumerate(reviewFile, 1):
                 for s in searchStrings:
                     if s in line:
+                        hitsinfile += 1
+                        total_hits += 1
                         print '[+]', s, 'at line:', num, '\t', line.lstrip()
                         report += infile + ' ' + s + ' at line: ' + str(num) + '\n' + line.lstrip() + '\n\n'
-            report += '[*] End report for ' + infile + '\n'
-            report += '=== \n\n'
+            # Only print this for files that contain code of interest.
+            if hitsinfile > 0:
+                report += '[*] Found ' + str(hitsinfile) + ' hits in ' + infile + '\n'
+                report += '=== \n\n'
+    report += 'Total Hits: ' + str(total_hits) + '\n'
     return report
 
 
