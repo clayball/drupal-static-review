@@ -17,6 +17,7 @@ infiles = []
 # ######### LOCAL FUNCTIONS #########
 
 # Static report
+# TODO: work on fine-tuning this over time.
 def find_search_strings():
     print '[+] Searching for strings of interest..'
     report = ''
@@ -37,7 +38,9 @@ def find_search_strings():
             if hitsinfile > 0:
                 report += '[*] Found ' + str(hitsinfile) + ' hits in ' + infile + '\n'
                 report += '=== \n\n'
-    report += 'Total Hits: ' + str(total_hits) + '\n'
+    report += '========================================'
+    report += 'Summary Details\n'
+    report += 'Total locations found: ' + str(total_hits) + '\n'
     return report
 
 
