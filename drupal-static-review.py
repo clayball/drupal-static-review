@@ -38,7 +38,7 @@ def find_search_strings():
             if hitsinfile > 0:
                 report += '[*] Found ' + str(hitsinfile) + ' hits in ' + infile + '\n'
                 report += '=== \n\n'
-    report += '========================================'
+    report += '========================================\n'
     report += 'Summary Details\n'
     report += 'Total locations found: ' + str(total_hits) + '\n'
     return report
