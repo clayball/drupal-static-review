@@ -57,7 +57,8 @@ def find_all_files():
     for root, dirs, files in os.walk(fullPath):
         for f in files:
             if f.endswith(".module") or f.endswith(".inc") or \
-                    f.endswith(".install") or f.endswith(".php"):
+                    f.endswith(".install") or f.endswith(".php") or \
+                        f.endswith(".theme"):
                 print(os.path.join(root, f))
                 infiles.append(os.path.join(root, f))
 
