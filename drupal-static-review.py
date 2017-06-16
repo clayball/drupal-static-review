@@ -45,6 +45,7 @@ def find_search_strings():
 
 
 # Menu report
+# D8 makes this easy for us.. look inside *.routing.yml file.
 def find_menu_paths():
     print '[+] finding menu paths..'
     menupaths = ['TODO']
@@ -140,7 +141,3 @@ fs.close()
 # Find all of the menu paths and flag those that are admin
 #menuReport = find_menu_paths()
 
-
-##############
-# Input Report
-# ############
