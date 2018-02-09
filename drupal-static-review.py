@@ -1,19 +1,21 @@
 #!/usr/bin/env python2
 
-### drupal-static-review.py: Generates a document containing any points of
-###                          interest discovered in a module.
-###                          Points of interest are defined in the config file.
+"""drupal-static-review.py: Generates a document containing any points of
+                            interest discovered in a module.
+                            Points of interest are defined in the config file.
 
-## Usage ##
-#   $ python drupal-static-review.py MODULENAME
-# See README for more information.
+   Usage 
+      $ python drupal-static-review.py MODULENAME [SCANTYPE]
 
-## General Overview / Notes ##
-# 1. Open each file, one at a time, and search for string.
-#    Display each line number the string is found on.
-# 2. Use a searchString list instead of a single string
-# 3. Search multiple files
-# 4. Add count of each string found (summary details)
+   General Overview / Notes
+     1. Open each file, one at a time, and search for string.
+        Display each line number the string is found on.
+     2. Use a searchString list instead of a single string
+     3. Search multiple files
+     4. Add count of each string found (summary details)
+
+See README for more information.
+"""
 
 
 ######### IMPORTS #########
@@ -38,38 +40,58 @@ debugMessages = False
 # Static report
 # TODO: work on fine-tuning this over time.
 def find_search_strings():
+    """Searches files for strings specified by search type.
+
+        Constructs text to use for report file.
+
+        Returns text for report file.
+    """
     print '[+] Searching for strings of interest..'
+
     report = ''
     total_hits = 0
+    
+    # Iterate through the files that make up the module.
     for infile in infiles:
-        hitsinfile = 0
-        # print '[debug] infile: ', infile
+        hitsinfile = 0 # Keep track of # of hits found.
+
+        # Open file for reading contents.
         with open(infile) as reviewFile:
-            # print '[debug] reviewFile ', reviewFile
             for num, line in enumerate(reviewFile, 1):
                 for s in searchStrings:
                     if s in line:
+                        # Found an occurrence of a search string.
                         hitsinfile += 1
                         total_hits += 1
-                        print '[+]', s, 'at line:', num, '\t', line.lstrip()
-                        report += infile + ' ' + s + ' at line: ' + str(num) + '\n' + line.lstrip() + '\n\n'
+                        clean_line = line.lstrip()
+                        print '[+] %s at line: %d\t%s' % (s, num, clean_line)
+                        report += '%s %s at line: %d\n%s\n\n' % (infile, \
+                                                                 s,      \
+                                                                 num,    \
+                                                                 clean_line)
+
             # Only print this for files that contain code of interest.
             if hitsinfile > 0:
-                report += '[*] Found ' + str(hitsinfile) + ' hits in ' + infile + '\n'
+                report += '[*] Found %d hits in %s\n' % (hitsinfile, infile)
                 report += '=== \n\n'
-    report += '========================================\n'
+
+    report += get_report_footer(total_hits)
+    return report
+
+
+# Helper for find_search_strings().
+def get_report_footer(total_hits):
+    """Returns last lines (footer) of report."""
+    report = '========================================\n'
     report += 'Summary Details\n'
-    report += 'Total locations found: ' + str(total_hits) + '\n'
+    report += 'Total locations found: %d\n' % total_hits
     return report
 
 
 # Menu report
 # D8 makes this easy for us.. look inside *.routing.yml file.
 def find_menu_paths():
-    """
-    NOTE: Functionality not currently implemented in Static Review.
-    Returns a list of the Menu Paths of the module.
-    """
+    """Returns a list of the Menu Paths of the module."""
     print '[+] Discovering Menu Paths..'
     menupaths = ['TODO']
     return menupaths
@@ -77,7 +99,13 @@ def find_menu_paths():
 
 # Find all files to be searched
 def find_all_files():
-    print '[+] finding all files..'
+    """Appends to global variable `infiles` every
+       .module, .inc, .install, .php, .theme, and
+       .twig file of the module. 
+       
+       These are the files we want to search.
+    """
+    print '[+] Finding all files...'
     for root, dirs, files in os.walk(fullPath):
         for f in files:
             if f.endswith(".module") or f.endswith(".inc") or \
@@ -90,26 +118,27 @@ def find_all_files():
 # Report header
 def create_staticreport_header():
     report_header = ''
-    report_header = 'Static Report for ' + moduleName + '\n'
-    report_header += 'Search type: ' + searchType + '\n'
+    report_header = 'Static Report for %s\n' % moduleName
+    report_header += 'Search type: %s\n' % searchType
     report_header += '==================================================\n\n'
     if debugMessages:
-        print '\n\n' + report_header
+        print '\n\n%s' % report_header
     return report_header
 
 
 # Menu report header
 def create_menureport_header():
     report_header = None
-    report_header = 'Menu Report for ' + moduleName + '\n'
+    report_header = 'Menu Report for %s\n' % moduleName
     report_header += '==================================================\n\n'
     if debugMessages:
-        print '\n\n' + report_header
+        print '\n\n%s' % report_header
     return report_header
 
 
 def get_module_arg():
     """Returns arg corresponding to module name.
+
     If arg doesn't exist, prints error and terminates.
     """
     try:
@@ -121,8 +150,10 @@ def get_module_arg():
 
 def get_type_arg():
     """Returns arg corresponding to search type.
+
     "Search type" refers to the type of strings (ex sql, xss) 
     to search for. These are defined in the config file.
+
     If arg doesn't exist, default to a full scan to check for all types.
     """
     try:
@@ -133,6 +164,7 @@ def get_type_arg():
 
 def read_config():
     """Returns loaded config yaml file.
+
     If unable to open config file, prints error and terminates.
     """
     try:
@@ -177,7 +209,7 @@ def main():
     staticHeader = create_staticreport_header()
 
     # Write the static report data
-    fs = open('reports/' + moduleName + '-static-' + searchType + '.txt', 'w')
+    fs = open('reports/%s-static-%s.txt' % (moduleName, searchType), 'w')
     fs.write(staticHeader)
     fs.write(stringReport)
     fs.close()
