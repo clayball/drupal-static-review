@@ -1,12 +1,13 @@
 review_dir: /home/<user>/code-reviews/drupal7/contrib
-review_filetypes: [theme, engine, profile, install, js, html, php, css, module, inc]
+review_filetypes: [theme, engine, profile, install, js, html, php, css, module, inc, twig]
 
-full: ["$form_state['values']", "$form_state['input']", "preg_replace", "eval", "mysql", "query", "db_query", "->query(", "\Drupal\Core\Database", "database()", "$_GET", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup", "urlencode", "chmod", "mkdir", "rewrite_settings", "rmdir", "unlink"]
+full: ["$form_state['values']", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup", "filter", "escape", "filterAdmin", "formatPlural", "stripDangerousProtocols", "filterBadProtocol", "format", "drupal_render", "eval", "$form_state['input']", "preg_replace", "mysql", "query", "db_query", "->query(", "\\Drupal\\Core\\Database", "database()", "$form_state", "_GET", "_POST", "_REQUEST", "check_markup", "check_plain", "check_url", "drupal_attributes", "urlencode", "drupal_strip_dangerous_protocols", "filter_xss", "filter_xss_admin", "filter_xss_bad_protocol", "format_string", "get_t", "_filter_xss_attributes", "_filter_xss_split", "escape", "filterAdmin", "formatPlural", "stripDangerousProtocols", "filterBadProtocol", "format", "drupal_render", "chmod", "mkdir", "rewrite_settings", "rmdir", "unlink", "raw", "autoescape"]
 good: ["$form_state['values']", "$_POST", "$_REQUEST", "check_plain", "filter_xss", "filter_xss_admin", "check_markup", "filter", "escape", "filterAdmin", "formatPlural", "stripDangerousProtocols", "filterBadProtocol", "format", "drupal_render"]
 bad: ["eval", "$form_state['input']", "preg_replace"]
-sql: ["mysql", "query", "db_query", "->query(", "\Drupal\Core\Database", "database()" ]
+sql: ["mysql", "query", "db_query", "->query(", "\\Drupal\\Core\\Database", "database()"]
 input: ["$form_state", "_GET", "_POST", "_REQUEST"]
-sanitization: ["check_markup", "check_plain", "check_url", "drupal_attributes", "drupal_strip_dangerous_protocols", "filter_xss", "filter_xss_admin", "filter_xss_bad_protocol", "format_string", "get_t", "_filter_xss_attributes", "_filter_xss_split", "escape", "filterAdmin", "formatPlural", "stripDangerousProtocols", "filterBadProtocol", "format", "drupal_render"]
+sanitization: ["check_markup", "check_plain", "check_url", "drupal_attributes", "urlencode", "drupal_strip_dangerous_protocols", "filter_xss", "filter_xss_admin", "filter_xss_bad_protocol", "format_string", "get_t", "_filter_xss_attributes", "_filter_xss_split", "escape", "filterAdmin", "formatPlural", "stripDangerousProtocols", "filterBadProtocol", "format", "drupal_render"]
 filesystem: ["chmod", "mkdir", "rewrite_settings", "rmdir", "unlink"]
+twig: ["raw", "autoescape"]
 
 debug_messages: False
