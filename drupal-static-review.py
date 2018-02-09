@@ -1,20 +1,39 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-# - Open file and search for string.. display each line number the string is
-# found on.
-# - Use a searchString list instead of a single string
-# - Search multiple files
-# - Add count of each string found (summary details)
+### drupal-static-review.py: Generates a document containing any points of
+###                          interest discovered in a module.
+###                          Points of interest are defined in the config file.
+
+## Usage ##
+#   $ python drupal-static-review.py MODULENAME
+# See README for more information.
+
+## General Overview / Notes ##
+# 1. Open each file, one at a time, and search for string.
+#    Display each line number the string is found on.
+# 2. Use a searchString list instead of a single string
+# 3. Search multiple files
+# 4. Add count of each string found (summary details)
+
+
+######### IMPORTS #########
 
 import sys
 import os
 import yaml
 
-# ######### LOCAL VARIABLES #########
+
+######### GLOBAL-SCOPE VARIABLES #########
+
+moduleName = ""
+searchType = ""
 infiles = []
+fullPath = ""
+searchStrings = []
+debugMessages = False
 
 
-# ######### LOCAL FUNCTIONS #########
+######### FUNCTIONS #########
 
 # Static report
 # TODO: work on fine-tuning this over time.
@@ -47,7 +66,11 @@ def find_search_strings():
 # Menu report
 # D8 makes this easy for us.. look inside *.routing.yml file.
 def find_menu_paths():
-    print '[+] finding menu paths..'
+    """
+    NOTE: Functionality not currently implemented in Static Review.
+    Returns a list of the Menu Paths of the module.
+    """
+    print '[+] Discovering Menu Paths..'
     menupaths = ['TODO']
     return menupaths
 
@@ -59,7 +82,7 @@ def find_all_files():
         for f in files:
             if f.endswith(".module") or f.endswith(".inc") or \
                     f.endswith(".install") or f.endswith(".php") or \
-                        f.endswith(".theme"):
+                        f.endswith(".theme") or f.endswith(".twig"):
                 print(os.path.join(root, f))
                 infiles.append(os.path.join(root, f))
 
@@ -85,53 +108,86 @@ def create_menureport_header():
     return report_header
 
 
-# ######### MAIN PROGRAM #########
+def get_module_arg():
+    """Returns arg corresponding to module name.
+    If arg doesn't exist, prints error and terminates.
+    """
+    try:
+        return sys.argv[1]
+    except:
+        print "\n[-] Missing arg! Specify module name.\n"
+        exit(1)
 
-# get arguments
-moduleName = sys.argv[1]
 
-# Allow search for specific types of strings, e.g. sql, or all if
-# len(sys.argv[2]):
-try:
-    searchType = sys.argv[2]
-except:
-    searchType = "full"
+def get_type_arg():
+    """Returns arg corresponding to search type.
+    "Search type" refers to the type of strings (ex sql, xss) 
+    to search for. These are defined in the config file.
+    If arg doesn't exist, default to a full scan to check for all types.
+    """
+    try:
+        return sys.argv[2]
+    except:
+        return "full"
 
-# Read settings from config file
-try:
-    with open('./config/config.yaml', 'r') as setting:
-        contentYaml = yaml.load(setting)
-except:
-    print "[-] TODO: add error message"
-    exit(0)
 
-codeDirectory = contentYaml['review_dir']
-searchStrings = contentYaml[searchType]
-debugMessages = contentYaml['debug_messages']
-fileTypes = contentYaml['review_filetypes']
-print "[*] Performing %s search on %s" % (searchType, moduleName)
-print "[*]  located in %s" % codeDirectory
+def read_config():
+    """Returns loaded config yaml file.
+    If unable to open config file, prints error and terminates.
+    """
+    try:
+        with open('./config/config.yaml', 'r') as setting:
+            return yaml.load(setting)
+    except:
+        print "\n[-] Unable to open config.yaml!\n"
+        exit(2)
 
-fullPath = codeDirectory + '/' + moduleName
 
-# Find all of the files we are interested in searching
-find_all_files()
+######### MAIN PROGRAM #########
 
-# #############
-# Static Report
-# #############
+def main():
+    global moduleName, searchType, fullPath, searchStrings, debugMessages
 
-# Find all the strings we are interested in
-stringReport = find_search_strings()
+    # Get arguments.
+    moduleName = get_module_arg()
+    searchType = get_type_arg()
+   
+    # Load config file.
+    contentYaml = read_config()
 
-# Create the staticReport header
-staticHeader = create_staticreport_header()
+    # Read settings from config file
+    codeDirectory = contentYaml['review_dir']
+    searchStrings = contentYaml[searchType]
+    debugMessages = contentYaml['debug_messages']
+    fileTypes = contentYaml['review_filetypes']
 
-# Write the static report data
-fs = open('reports/' + moduleName + '-static-' + searchType + '.txt', 'w')
-fs.write(staticHeader)
-fs.write(stringReport)
-fs.close()
+    print "[*] Performing %s search on %s" % (searchType, moduleName)
+    print "[*]  located in %s" % codeDirectory
+
+    fullPath = codeDirectory + '/' + moduleName
+
+    # Find all of the files we are interested in scanning.
+    find_all_files()
+
+    ## Static Report ##
+    # Find all the strings we are interested in
+    stringReport = find_search_strings()
+    
+    # Create the static report header
+    staticHeader = create_staticreport_header()
+
+    # Write the static report data
+    fs = open('reports/' + moduleName + '-static-' + searchType + '.txt', 'w')
+    fs.write(staticHeader)
+    fs.write(stringReport)
+    fs.close()
+
+
+######### PROCESS #########
+
+if __name__ == '__main__':
+    main()
+
 
 # ###########
 # Menu Report
